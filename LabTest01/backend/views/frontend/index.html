@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="CSS/main.css">
+    <title>LabTest01 | Chat App</title>
+</head>
+<body>
+
+    <script>
+        const socket = io()
+        socket.on('connect', () => {
+            console.log('Connected to server')
+            const socketID = document.getElementById('message');
+            socketID.innerHTML = `<b>${socket.id}</b>`
+        })
+        socket.on('group_message', (data)=> {
+            const chat_box = document.getElementById('chat-box')
+            const msg = `<p><b>${data.group_name} : ${data.senderId}:</b> ${data.message}<p/>`
+            container.innerHTML += msg
+        })
+
+        function sendMessage(){
+            const group = document.getElementById('groupPicker')
+            const groupName = group.value
+            console.log(groupName)
+            const txtmessage = document.getElementById('message')
+            const data = {
+                senderId: socket.id,
+                group_name: groupName,
+                message: txtmessage,
+                date_sent: new Date()
+            }
+            console.log(data)
+            //socket.emit('group_message', data)
+        }
+        function joinGroup(){
+            const group = document.querySelector('select')
+            const groupName = group.value
+            console.log(groupName)
+            socket.emit('join_group', groupName)
+        }
+        function leaveGroup(){
+            const group = document.querySelector('select')
+            const groupName = group.value
+            socket.emit('leave_group', groupName)
+        }
+    </script>
+        <div class="input-container">
+            <h2>Chat Room</h2>
+            <select name="group" id="groupPicker">
+                <option value="covid-19">Covid-19</option>
+                <option value="cloud computing">cloud computing</option>
+                <option value="sports">sports</option>
+                <option value="devops">devops</option>
+
+            </select>
+            <button onclick="joinGroup()">join group</button>
+            <button onclick="leaveGroup()">leave group</button>
+            <div id="chat-box"></div>
+            <input type="text" id="message" name="message" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up Page</title>
+    <link rel="stylesheet" href="CSS/main.css">
+</head>
+<body>
+    <div class="input-container">
+        <h2>Sign Up</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="firstname" placeholder="First Name" required>
+        <input type="text" id="lastname" placeholder="Last Name" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="signup()">Sign Up</button>
+        <p id="message"></p>
+    </div>
+
+    
+    <script>
+        async function signup() {
+            const username = document.getElementById("username").value;
+            const firstname = document.getElementById("firstname").value;
+            const lastname = document.getElementById("lastname").value;
+            const password = document.getElementById("password").value;
+            const messageElement = document.getElementById("message");
+
+            if (!username || !firstname || !lastname || !password) {
+                messageElement.textContent = "Please fill in all fields.";
+                return;
+            }
+
+            const signupData = {
+                username,
+                firstname,
+                lastname,
+                password,
+                createon: new Date().toLocaleString("en-US", { timeZone: "UTC" })
+            };
+
+            try {
+                const response = await fetch("http://localhost:3005/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(signupData)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    messageElement.style.color = "green";
+                    messageElement.textContent = "Signup successful!";
+                } else {
+                    messageElement.style.color = "red";
+                    messageElement.textContent = data.message;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                messageElement.style.color = "red";
+                messageElement.textContent = "Something went wrong!";
+            }
+        }
+    </script>
+</body>
+</html>

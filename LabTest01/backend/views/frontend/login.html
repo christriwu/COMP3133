@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="CSS/main.css">
+</head>
+<body>
+    <div class="input-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <button onclick="signUp()">Sign up</button>
+        <p id="error" class="error"></p>
+    </div>
+    <script>
+        function signUp(){
+            window.location.href = 'signup.html'
+        }
+    </script>
+</body>
+</html>
